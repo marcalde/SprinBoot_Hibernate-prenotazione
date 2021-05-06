@@ -50,10 +50,10 @@ public class PrenotazioneController  {
 
 
 	@PostMapping(value="/API/prenot", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE) 
-	PrenotazioneEntity registra(PrenotazioneEntity prenotazi) {
-		System.out.print(prenotazi);
-		prenotazioneService.addPrenotazione(prenotazi);
-		return prenotazi;
+	PrenotazioneEntity registra(PrenotazioneEntity prenotazione) {
+		System.out.print(prenotazione);
+		prenotazioneService.addPrenotazione(prenotazione);
+		return prenotazione;
 	}
 
 	@GetMapping(value = "/API/prenot/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
