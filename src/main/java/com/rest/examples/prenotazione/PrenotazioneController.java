@@ -10,12 +10,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rest.examples.prenotazione.entity.PrenotazioneEntity;
 import com.rest.examples.prenotazione.model.Prenotazione;
 
@@ -48,12 +51,31 @@ public class PrenotazioneController  {
 	}
 	 */
 
-
+/*
 	@PostMapping(value="/API/prenot", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE) 
-	PrenotazioneEntity registra(PrenotazioneEntity prenotazione) {
-		System.out.print(prenotazione);
+	ResponseEntity<String> registra( PrenotazioneEntity prenotazione) {
+	//	System.out.print(prenotazione);
 		prenotazioneService.addPrenotazione(prenotazione);
-		return prenotazione;
+ 
+        ObjectMapper Obj = new ObjectMapper();
+        String jsonStr = null;
+        try {
+            jsonStr = Obj.writeValueAsString(prenotazione);
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+	
+		return ResponseEntity.status(HttpStatus.OK).body(jsonStr);
+	}
+	*/
+	
+	@PostMapping(value="/API/prenot", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE) 
+	String registra(@ModelAttribute("prenotazione") PrenotazioneEntity prenotazione, Model model) {
+		prenotazioneService.addPrenotazione(prenotazione);
+		
+	//	model.addAttribute("prenotazione", prenotazione);
+		
+		return "prenotazione_recap";
 	}
 
 	@GetMapping(value = "/API/prenot/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,5 +89,9 @@ public class PrenotazioneController  {
 		return list;
 	}
 
+	@GetMapping("/API")
+	public String prova(Model model) {
+		return "prova";
+	}
 
 }
